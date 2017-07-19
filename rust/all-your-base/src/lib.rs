@@ -29,7 +29,26 @@
 ///  * Never output leading 0 digits. However, your function must be able to
 ///     process input with leading 0 digits.
 ///
-#[allow(unused_variables)]
 pub fn convert(number: &[u32], from_base: u32, to_base: u32) -> Result<Vec<u32>, ()> {
-    unimplemented!()
+    if from_base < 2 || to_base < 2 {
+        return Err(());
+    }
+    if number.iter().any(|&n| n >= from_base) {
+        return Err(());
+    }
+
+    let mut intermediate = number
+        .iter()
+        .rev()
+        .enumerate()
+        .map(|(i, &n)| n * from_base.pow(i as u32))
+        .sum::<u32>();
+
+    let mut result = Vec::new();
+    while intermediate > 0 {
+        result.push(intermediate % to_base);
+        intermediate /= to_base;
+    }
+    result.reverse();
+    Ok(result)
 }
