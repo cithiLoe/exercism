@@ -1,3 +1,6 @@
+// The code below is a stub. Just enough to satisfy the compiler.
+// In order to pass the tests you can add-to or change any of this code.
+
 #[derive(PartialEq, Debug)]
 pub enum Direction {
     North,
@@ -6,6 +9,7 @@ pub enum Direction {
     West,
 }
 
+#[derive(Debug)]
 struct Position {
     x: isize,
     y: isize,
@@ -13,7 +17,7 @@ struct Position {
 
 impl Position {
     fn new(x: isize, y: isize) -> Self {
-        Position { x: x, y: y }
+        Position { x: x, y: y}
     }
 
     fn advance(self, direction: &Direction) -> Self {
@@ -24,10 +28,6 @@ impl Position {
             Direction::West => Self::new(self.x - 1, self.y),
         }
     }
-
-    fn as_tuple(&self) -> (isize, isize) {
-        (self.x, self.y)
-    }
 }
 
 pub struct Robot {
@@ -36,7 +36,7 @@ pub struct Robot {
 }
 
 impl Direction {
-    fn next_clockwise(self) -> Self {
+    fn turn_right(self) -> Self {
         match self {
             Direction::North => Direction::East,
             Direction::East => Direction::South,
@@ -45,7 +45,7 @@ impl Direction {
         }
     }
 
-    fn prev_clockwise(self) -> Self {
+    fn turn_left(self) -> Self {
         match self {
             Direction::North => Direction::West,
             Direction::West => Direction::South,
@@ -56,6 +56,7 @@ impl Direction {
 }
 
 impl Robot {
+    #[allow(unused_variables)]
     pub fn new(x: isize, y: isize, d: Direction) -> Self {
         Robot {
             position: Position { x: x, y: y },
@@ -66,22 +67,19 @@ impl Robot {
     pub fn turn_right(self) -> Self {
         Robot {
             position: self.position,
-            direction: self.direction.next_clockwise(),
+            direction: self.direction.turn_right(),
         }
     }
 
     pub fn turn_left(self) -> Self {
         Robot {
             position: self.position,
-            direction: self.direction.prev_clockwise(),
+            direction: self.direction.turn_left(),
         }
     }
 
     pub fn advance(self) -> Self {
-        Robot {
-            position: self.position.advance(&self.direction),
-            direction: self.direction,
-        }
+        Robot { position: self.position.advance(&self.direction), direction: self.direction }
     }
 
     pub fn instructions(self, instructions: &str) -> Self {
@@ -96,7 +94,7 @@ impl Robot {
     }
 
     pub fn position(&self) -> (isize, isize) {
-        self.position.as_tuple()
+        (self.position.x, self.position.y)
     }
 
     pub fn direction(&self) -> &Direction {
